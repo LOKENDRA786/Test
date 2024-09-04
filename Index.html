@@ -3,100 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Pop Game</title>
+    <title>Spinner Wheel Game</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #87CEFA;
+            font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
         }
 
-        #gameArea {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .bubble {
-            position: absolute;
+        #wheel {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.6);
-            border: 2px solid white;
-            cursor: pointer;
-            animation: floatUp 8s linear infinite;
+            border: 10px solid #333;
+            position: relative;
+            transform: rotate(0deg);
+            transition: transform 4s ease-out;
         }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh);
-                opacity: 0;
-            }
-        }
-
-        #scoreBoard {
+        #wheel .slice {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            color: white;
-            z-index: 1000;
+            width: 50%;
+            height: 50%;
+            background: conic-gradient(
+                #FF6347 0 40deg,
+                #FFD700 40deg 80deg,
+                #8A2BE2 80deg 120deg,
+                #5F9EA0 120deg 160deg,
+                #FF4500 160deg 200deg,
+                #32CD32 200deg 240deg,
+                #FF69B4 240deg 280deg,
+                #1E90FF 280deg 320deg,
+                #6A5ACD 320deg 360deg
+            );
+            border-radius: 0 100% 0 100%;
+            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+        }
+
+        #pointer {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid red;
+            position: absolute;
+            top: -30px;
+            left: calc(50% - 10px);
+        }
+
+        #spinButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
         }
     </style>
 </head>
 <body>
 
-    <div id="gameArea"></div>
-    <div id="scoreBoard">Score: 0</div>
+    <div id="wheelContainer">
+        <div id="wheel">
+            <div id="pointer"></div>
+        </div>
+    </div>
+
+    <button id="spinButton">Spin</button>
+    <div id="result"></div>
 
     <script>
-        const gameArea = document.getElementById('gameArea');
-        const scoreBoard = document.getElementById('scoreBoard');
-        let score = 0;
+        const wheel = document.getElementById('wheel');
+        const spinButton = document.getElementById('spinButton');
+        const result = document.getElementById('result');
 
-        function createBubble() {
-            const bubble = document.createElement('div');
-            const size = Math.random() * 60 + 20; // Bubble size between 20px and 80px
-            const posX = Math.random() * (window.innerWidth - size);
-            const delay = Math.random() * 5;
+        const options = ['100 points', '200 points', '300 points', '400 points', '500 points', '600 points', '700 points', '800 points', '900 points'];
 
-            bubble.classList.add('bubble');
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${posX}px`;
-            bubble.style.animationDelay = `${delay}s`;
-
-            bubble.addEventListener('click', () => {
-                score += 1;
-                scoreBoard.textContent = `Score: ${score}`;
-                bubble.remove(); // Remove the bubble after popping
-            });
-
-            gameArea.appendChild(bubble);
+        spinButton.addEventListener('click', () => {
+            const angle = Math.floor(Math.random() * 360) + 3600; // Spin multiple times for effect
+            wheel.style.transform = `rotate(${angle}deg)`;
 
             setTimeout(() => {
-                bubble.remove(); // Remove the bubble if it goes out of view
-            }, 8000); // Matches the animation duration
-        }
-
-        function startGame() {
-            setInterval(createBubble, 1000); // Create a new bubble every second
-        }
-
-        startGame();
+                const winningIndex = Math.floor(((angle % 360) / 40) % 9); // 40 degrees per slice
+                result.textContent = `You won ${options[winningIndex]}!`;
+            }, 4000); // Match the transition duration
+        });
     </script>
 
 </body>
