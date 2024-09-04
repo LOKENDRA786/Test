@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Calendar with Holidays</title>
+    <title>Dynamic Indian Calendar with Holidays</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -118,52 +118,14 @@
 
     <div class="calendar animation-fade">
         <div class="calendar-header">
-            <h2>Indian Calendar - September 2024</h2>
+            <h2 id="monthYear"></h2>
         </div>
         <div class="calendar-body">
             <div class="month">
-                <button class="btn btn-outline-primary">&lt; Previous</button>
-                <h3>September 2024</h3>
-                <button class="btn btn-outline-primary">Next &gt;</button>
+                <button id="prevMonth" class="btn btn-outline-primary">&lt; Previous</button>
+                <button id="nextMonth" class="btn btn-outline-primary">Next &gt;</button>
             </div>
-            <div class="days">
-                <div class="day">1</div>
-                <div class="day">2</div>
-                <div class="day">3</div>
-                <div class="day holiday">
-                    4
-                    <span class="day-tooltip">Ganesh Chaturthi</span>
-                </div>
-                <div class="day">5</div>
-                <div class="day">6</div>
-                <div class="day">7</div>
-                <div class="day">8</div>
-                <div class="day">9</div>
-                <div class="day">10</div>
-                <div class="day">11</div>
-                <div class="day">12</div>
-                <div class="day">13</div>
-                <div class="day">14</div>
-                <div class="day">15</div>
-                <div class="day">16</div>
-                <div class="day">17</div>
-                <div class="day">18</div>
-                <div class="day">19</div>
-                <div class="day">20</div>
-                <div class="day">21</div>
-                <div class="day">22</div>
-                <div class="day">23</div>
-                <div class="day">24</div>
-                <div class="day holiday">
-                    25
-                    <span class="day-tooltip">Onam</span>
-                </div>
-                <div class="day">26</div>
-                <div class="day">27</div>
-                <div class="day">28</div>
-                <div class="day">29</div>
-                <div class="day">30</div>
-            </div>
+            <div id="daysContainer" class="days"></div>
         </div>
     </div>
 
@@ -172,10 +134,78 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Optional: JavaScript for more interactivity or dynamic date handling -->
+    <!-- JavaScript to generate dynamic calendar -->
     <script>
-        // Example of adding some interactivity or animations
-        // You can use jQuery or plain JavaScript to add more features
+        const holidays = {
+            '2024-09-04': 'Ganesh Chaturthi',
+            '2024-09-25': 'Onam',
+            // Add more holidays here
+        };
+
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        function generateCalendar(month, year) {
+            const daysContainer = document.getElementById('daysContainer');
+            daysContainer.innerHTML = ''; // Clear previous days
+
+            const monthYear = document.getElementById('monthYear');
+            monthYear.textContent = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Create empty slots before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptySlot = document.createElement('div');
+                emptySlot.classList.add('day');
+                daysContainer.appendChild(emptySlot);
+            }
+
+            // Create days with possible holidays
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                if (holidays[dateStr]) {
+                    dayElement.classList.add('holiday');
+                    const tooltip = document.createElement('span');
+                    tooltip.classList.add('day-tooltip');
+                    tooltip.textContent = holidays[dateStr];
+                    dayElement.appendChild(tooltip);
+                }
+
+                dayElement.textContent = day;
+                daysContainer.appendChild(dayElement);
+            }
+        }
+
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        // Initial calendar generation
+        generateCalendar(currentMonth, currentYear);
     </script>
 
 </body>
