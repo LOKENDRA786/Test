@@ -3,104 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spinner Wheel Game</title>
+    <title>Indian Calendar with Holidays</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
     <style>
         body {
+            background-color: #f7f7f7;
             font-family: Arial, sans-serif;
+        }
+
+        .calendar {
+            max-width: 900px;
+            margin: 50px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .calendar-body {
+            padding: 20px;
+        }
+
+        .month {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
         }
 
-        #wheel {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            border: 10px solid #333;
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .day {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background-color: #e9ecef;
+            border-radius: 10px;
             position: relative;
-            transform: rotate(0deg);
-            transition: transform 4s ease-out;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        #wheel .slice {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            background: conic-gradient(
-                #FF6347 0 40deg,
-                #FFD700 40deg 80deg,
-                #8A2BE2 80deg 120deg,
-                #5F9EA0 120deg 160deg,
-                #FF4500 160deg 200deg,
-                #32CD32 200deg 240deg,
-                #FF69B4 240deg 280deg,
-                #1E90FF 280deg 320deg,
-                #6A5ACD 320deg 360deg
-            );
-            border-radius: 0 100% 0 100%;
-            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+        .day:hover {
+            transform: scale(1.1);
+            background-color: #007bff;
+            color: #fff;
         }
 
-        #pointer {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid red;
+        .holiday {
+            background-color: #ff4d4d;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .holiday:hover {
+            background-color: #ff0000;
+        }
+
+        .animation-fade {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .tooltip-inner {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .tooltip-arrow {
+            border-bottom-color: #007bff !important;
+        }
+
+        .day-tooltip {
             position: absolute;
             top: -30px;
-            left: calc(50% - 10px);
-        }
-
-        #spinButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            background-color: #333;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            background-color: #007bff;
             color: #fff;
+            padding: 5px 10px;
             border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
+        .day:hover .day-tooltip {
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div id="wheelContainer">
-        <div id="wheel">
-            <div id="pointer"></div>
+    <div class="calendar animation-fade">
+        <div class="calendar-header">
+            <h2>Indian Calendar - September 2024</h2>
+        </div>
+        <div class="calendar-body">
+            <div class="month">
+                <button class="btn btn-outline-primary">&lt; Previous</button>
+                <h3>September 2024</h3>
+                <button class="btn btn-outline-primary">Next &gt;</button>
+            </div>
+            <div class="days">
+                <div class="day">1</div>
+                <div class="day">2</div>
+                <div class="day">3</div>
+                <div class="day holiday">
+                    4
+                    <span class="day-tooltip">Ganesh Chaturthi</span>
+                </div>
+                <div class="day">5</div>
+                <div class="day">6</div>
+                <div class="day">7</div>
+                <div class="day">8</div>
+                <div class="day">9</div>
+                <div class="day">10</div>
+                <div class="day">11</div>
+                <div class="day">12</div>
+                <div class="day">13</div>
+                <div class="day">14</div>
+                <div class="day">15</div>
+                <div class="day">16</div>
+                <div class="day">17</div>
+                <div class="day">18</div>
+                <div class="day">19</div>
+                <div class="day">20</div>
+                <div class="day">21</div>
+                <div class="day">22</div>
+                <div class="day">23</div>
+                <div class="day">24</div>
+                <div class="day holiday">
+                    25
+                    <span class="day-tooltip">Onam</span>
+                </div>
+                <div class="day">26</div>
+                <div class="day">27</div>
+                <div class="day">28</div>
+                <div class="day">29</div>
+                <div class="day">30</div>
+            </div>
         </div>
     </div>
 
-    <button id="spinButton">Spin</button>
-    <div id="result"></div>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Optional: JavaScript for more interactivity or dynamic date handling -->
     <script>
-        const wheel = document.getElementById('wheel');
-        const spinButton = document.getElementById('spinButton');
-        const result = document.getElementById('result');
-
-        const options = ['100 points', '200 points', '300 points', '400 points', '500 points', '600 points', '700 points', '800 points', '900 points'];
-
-        spinButton.addEventListener('click', () => {
-            const angle = Math.floor(Math.random() * 360) + 3600; // Spin multiple times for effect
-            wheel.style.transform = `rotate(${angle}deg)`;
-
-            setTimeout(() => {
-                const winningIndex = Math.floor(((angle % 360) / 40) % 9); // 40 degrees per slice
-                result.textContent = `You won ${options[winningIndex]}!`;
-            }, 4000); // Match the transition duration
-        });
+        // Example of adding some interactivity or animations
+        // You can use jQuery or plain JavaScript to add more features
     </script>
 
 </body>
