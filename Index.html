@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Wheel Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        #wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 10px solid #333;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .segment {
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 100%;
+            background-color: #FFD700;
+            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+            border: 2px solid #333;
+        }
+
+        .segment:nth-child(odd) {
+            background-color: #FF6347;
+        }
+
+        .label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        #spin-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="wheel">
+        <!-- Segments of the wheel -->
+        <div class="segment" style="transform: rotate(0deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(40deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(80deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(120deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(160deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(200deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(240deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(280deg);">
+            <div class="label">Lose</div>
+        </div>
+        <div class="segment" style="transform: rotate(320deg);">
+            <div class="label">Win!</div>
+        </div>
+    </div>
+    <button id="spin-button">Spin the Wheel</button>
+    <div id="result"></div>
+
+    <script>
+        const wheel = document.getElementById('wheel');
+        const spinButton = document.getElementById('spin-button');
+        const result = document.getElementById('result');
+
+        spinButton.addEventListener('click', () => {
+            const randomAngle = Math.floor(Math.random() * 360);
+            wheel.style.transition = 'transform 4s ease-out';
+            wheel.style.transform = `rotate(${randomAngle + 3600}deg)`; // Adding 3600 to ensure multiple spins for effect
+
+            setTimeout(() => {
+                const normalizedAngle = (randomAngle % 360) / 40; // 40 is the degree for each segment
+                const segment = Math.floor(normalizedAngle);
+                
+                if (segment === 8) { // The 9th segment is the "Win!" segment
+                    result.textContent = "Congratulations! You won!";
+                    result.style.color = "#28a745";
+                } else {
+                    result.textContent = "Sorry, you lost. Try again!";
+                    result.style.color = "#dc3545";
+                }
+            }, 4000); // Match the timeout with the transition time
+        });
+    </script>
+</body>
+</html>
